@@ -1,0 +1,1 @@
+Extención de lop.py de el repo de minihacktools
