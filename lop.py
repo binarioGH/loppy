@@ -1,26 +1,42 @@
-#-*- coding: utf-8-*-
-from sys import argv
-import subprocess
+#-*-coding:utf-8-*-
+from subprocess import run
+def validate(ip):
+	if ip[:4].lower() == "www.":
+		return True
+	ip = ip.split(".")
+	if len(ip) != 4:
+		return False
+	for octet in ip:
+		try:
+			octet = int(octet)
+		except:
+			return False
+		else:
+			if octet >= 0 and octet <= 255:
+				continue
+			return False
+	return True
+
+def main():
+	iplist = []
+	ip = ""
+	print("Write 'done' if you are done.")
+	while ip != "done":
+		ip = input("Input an Ip: ")
+		ip = ip.lower()
+		if validate(ip):
+			iplist.append(ip)
+		elif ip == "done":
+			continue
+		else:
+			print("{} is not valid.".format(ip))
+	for ip in iplist:
+		print("\n\nPinging now {}\n".format(ip))
+		print("-"*60+"\n\n")
+		run("ping -n 3 {}".format(ip))
+		print("\n\n"+"-"*60)
+
+
 
 if __name__ == '__main__':
-	if len(argv) != 5:
-		print('''
-			loppy ocupa 5 argumentos para funcionar
-			lop.py -r (rango) -t (ip)''')
-		exit()
-	else:
-		count = 0
-		for a in argv:
-			if a == "-r":
-				rg = argv[count + 1]
-				try:
-					rg = int(argv[count +1])
-				except:
-					print("No se puede usar {} como rango".format(rg))
-			elif a == "-t":
-				ip = argv[count + 1]
-			count += 1
-		print("ip: {} \nrango: {}".format(ip, rg))
-
-
-
+	main()
